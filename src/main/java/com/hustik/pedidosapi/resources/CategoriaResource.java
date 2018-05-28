@@ -1,10 +1,14 @@
 package com.hustik.pedidosapi.resources;
 
 import com.hustik.pedidosapi.domain.Categoria;
-import java.util.ArrayList;
+import com.hustik.pedidosapi.services.CategoriaService;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,17 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Categoria> listar() {
+    @Autowired
+    private CategoriaService service;
 
-        Categoria cat1 = new Categoria(1, "Informática");
-        Categoria cat2 = new Categoria(2, "Escritório");
+    @GetMapping
+    public ResponseEntity<List<Categoria>> listAll() {
+        return ResponseEntity.ok(service.getAll());
+    }
 
-        List<Categoria> lista = new ArrayList<>();
-        lista.add(cat1);
-        lista.add(cat2);
-
-        return lista;
+    @GetMapping("/{id}")
+    public ResponseEntity<Categoria> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
+    }
+    
+    @PostMapping
+    public ResponseEntity<Categoria> saveAll() {
+        return null;
     }
 
 }
