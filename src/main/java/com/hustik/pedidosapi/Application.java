@@ -1,8 +1,12 @@
 package com.hustik.pedidosapi;
 
 import com.hustik.pedidosapi.domain.Categoria;
+import com.hustik.pedidosapi.domain.Cidade;
+import com.hustik.pedidosapi.domain.Estado;
 import com.hustik.pedidosapi.domain.Produto;
 import com.hustik.pedidosapi.repositories.CategoriaRepository;
+import com.hustik.pedidosapi.repositories.CidadeRepository;
+import com.hustik.pedidosapi.repositories.EstadoRepository;
 import com.hustik.pedidosapi.repositories.ProdutoRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -18,6 +22,10 @@ public class Application implements CommandLineRunner {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private ProdutoRepository produtoRepository;
+    @Autowired
+    private CidadeRepository cidadeRepository;
+    @Autowired
+    private EstadoRepository estadoRepository;
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -43,6 +51,21 @@ public class Application implements CommandLineRunner {
         
         categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
         produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
+        
+        Estado sc = new Estado(null, "Santa Catarina");
+        Estado sp = new Estado(null, "São Paulo");
+        
+        Cidade bc = new Cidade(null, "Balneário Camboriú", sc);
+        Cidade camb = new Cidade(null, "Camboriú", sc);
+        Cidade csp = new Cidade(null, "São Paulo", sp);
+        Cidade camp = new Cidade(null, "Campinas", sp);
+        
+        sc.getCidades().addAll(Arrays.asList(bc, camb));
+        sp.getCidades().addAll(Arrays.asList(csp, camp));
+        
+        estadoRepository.saveAll(Arrays.asList(sc, sp));
+        cidadeRepository.saveAll(Arrays.asList(bc, camb, csp, camp));
+        
     }
 
 }
