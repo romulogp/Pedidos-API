@@ -1,5 +1,6 @@
 package com.hustik.pedidosapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class Cliente implements Serializable {
     private String cpfCnpj;
     private Integer tipo;
     
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
     
