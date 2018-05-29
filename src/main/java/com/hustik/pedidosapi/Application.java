@@ -5,15 +5,25 @@ import com.hustik.pedidosapi.domain.Cidade;
 import com.hustik.pedidosapi.domain.Cliente;
 import com.hustik.pedidosapi.domain.Endereco;
 import com.hustik.pedidosapi.domain.Estado;
+import com.hustik.pedidosapi.domain.Pagamento;
+import com.hustik.pedidosapi.domain.PagamentoComBoleto;
+import com.hustik.pedidosapi.domain.PagamentoComCartao;
+import com.hustik.pedidosapi.domain.Pedido;
 import com.hustik.pedidosapi.domain.Produto;
+import com.hustik.pedidosapi.domain.StatusPagamento;
 import com.hustik.pedidosapi.domain.TipoCliente;
 import com.hustik.pedidosapi.repositories.CategoriaRepository;
 import com.hustik.pedidosapi.repositories.CidadeRepository;
 import com.hustik.pedidosapi.repositories.ClienteRepository;
 import com.hustik.pedidosapi.repositories.EnderecoRepository;
 import com.hustik.pedidosapi.repositories.EstadoRepository;
+import com.hustik.pedidosapi.repositories.PagamentoRepository;
+import com.hustik.pedidosapi.repositories.PedidoRepository;
 import com.hustik.pedidosapi.repositories.ProdutoRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -35,6 +45,10 @@ public class Application implements CommandLineRunner {
     private ClienteRepository clienteRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -88,6 +102,23 @@ public class Application implements CommandLineRunner {
         clienteRepository.saveAll(Arrays.asList(cli1));
         enderecoRepository.saveAll(Arrays.asList(end1, end2));
         
+        
+        DateTimeFormatter fmtDTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter fmtDt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        Pedido ped1 = new Pedido(null, LocalDateTime.parse("30/09/2018 16:19", fmtDTime), cli1, end1);
+        Pedido ped2 = new Pedido(null, LocalDateTime.parse("10/10/2018 19:45", fmtDTime), cli1, end2);
+        
+        Pagamento pgto1 = new PagamentoComCartao(null, StatusPagamento.QUITADO, ped1, 6);
+        ped1.setPagamento(pgto1);
+        
+        Pagamento pgto2 = new PagamentoComBoleto(null, StatusPagamento.PENDENTE, ped2, LocalDate.parse("20/10/2018", fmtDt), null);
+        ped2.setPagamento(pgto2);
+        
+        cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+        
+        pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+        pagamentoRepository.saveAll(Arrays.asList(pgto1, pgto2));
     }
 
 }
