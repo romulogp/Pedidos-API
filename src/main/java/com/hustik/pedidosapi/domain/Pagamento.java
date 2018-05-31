@@ -1,6 +1,6 @@
 package com.hustik.pedidosapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -25,7 +25,7 @@ public abstract class Pagamento implements Serializable {
     private Long id;
     private Integer status;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId// garante que o ID do pagamento seja o mesmo do pagamento

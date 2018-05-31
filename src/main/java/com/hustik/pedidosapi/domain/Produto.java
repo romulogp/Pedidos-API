@@ -1,6 +1,5 @@
 package com.hustik.pedidosapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,7 +32,7 @@ public class Produto implements Serializable {
     private String nome;
     private BigDecimal preco;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "PRODUTO_CATEGORIA",
